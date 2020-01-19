@@ -5,7 +5,7 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
-// const outputPath = path.resolve(__dirname, "output", "team.html");
+const outputPath = path.resolve(__dirname, "output", "team.html");
 
 const render = require("./lib/htmlRenderer");
 
@@ -22,7 +22,7 @@ function appMenu() {
                 name: "managerName",
                 message: "What is your manager's name?",
                 validate: answer => {
-                    if (answer !== ""){
+                    if (answer !== "") {
                         return true;
                     }
                     return "Please enter at least one character.";
@@ -50,7 +50,7 @@ function appMenu() {
                     const pass = answer.match(
                         /\S+@\S+\.\S+/
                     );
-                    if (pass){
+                    if (pass) {
                         return true;
                     }
                     return "Please a correct email address."
@@ -77,20 +77,20 @@ function appMenu() {
             createTeam();
         });
     }
-    function createTeam(){
+    function createTeam() {
 
         inquirer.prompt([
             {
                 type: "list",
                 name: "memberChoice",
                 message: "Which type of team member would you like to add?",
-                choices:[
+                choices: [
                     "Engineer",
                     "Intern",
                     "I don't want to add any more team members"
                 ]
             }
-        ]).then(userChoice =>{
+        ]).then(userChoice => {
             switch (userChoice.memberChoice) {
                 case "Engineer":
                     addEngineer();
@@ -103,19 +103,19 @@ function appMenu() {
             }
         });
     }
-    function addEngineer(){
+    function addEngineer() {
         inquirer.prompt([
             {
                 type: "input",
                 name: "engineerName",
                 message: "What is your engineer's name?",
                 validate: answer => {
-                    if (answer !== ""){
+                    if (answer !== "") {
                         return true;
                     }
                     return "Please enter at least one character"
                 }
-                
+
             },
             {
                 type: "input",
@@ -126,9 +126,13 @@ function appMenu() {
                         /^[1-9]\d*$/
                     );
                     if (pass) {
-                        return true;
+                        if (idArray.includes(answer)) {
+                            return "This ID is already taken. Please enter a different number."
+                        } else {
+
+                            return "Please enter a positive number greater than zero.";
+                        }
                     }
-                    return "Please enter a positive number greater than zero.";
                 }
             },
             {
@@ -139,7 +143,7 @@ function appMenu() {
                     const pass = answer.match(
                         /\S+@\S+\.\S+/
                     );
-                    if (pass){
+                    if (pass) {
                         return true;
                     }
                     return "Please a correct email address."
@@ -150,7 +154,7 @@ function appMenu() {
                 name: "engineerGithub",
                 message: "What is your Github username?",
                 validate: answer => {
-                    if (answer !== ""){
+                    if (answer !== "") {
                         return true;
                     }
                     return "Please enter at least one character"
@@ -163,4 +167,71 @@ function appMenu() {
             createTeam();
         });
     }
+    function addIntern() {
+        inquirer.prompt([
+            {
+                type: "input",
+                name: "internName",
+                message: "What is your intern's name?",
+                validate: answer => {
+                    if (answer !== "") {
+                        return true;
+                    }
+                    return "Please enter at least one character"
+                }
+
+            },
+            {
+                type: "input",
+                name: "internId",
+                message: "What is your intern's id?",
+                validate: answer => {
+                    const pass = answer.match(
+                        /^[1-9]\d*$/
+                    );
+                    if (pass) {
+                        return true;
+                    }
+                    return "Please enter a positive number greater than zero.";
+                }
+            },
+            {
+                type: "input",
+                name: "internEmail",
+                message: "What is your intern's email?",
+                validate: answer => {
+                    const pass = answer.match(
+                        /\S+@\S+\.\S+/
+                    );
+                    if (pass) {
+                        return true;
+                    }
+                    return "Please a correct email address."
+                }
+            },
+            {
+                type: "input",
+                name: "internSchool",
+                message: "What is your school name?",
+                validate: answer => {
+                    if (answer !== "") {
+                        return true;
+                    }
+                    return "Please enter at least one character"
+                },
+            }
+        ]).then(answers => {
+            const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+            teamMembers.push(intern);
+            idArray.push(answers.internId);
+            createTeam();
+        });
+    }
+    function buildTeam(){
+        fs.writeFileSync(outputPath, render(teamMembers), "utf-8")
+    }
+
+    createManager();
 }
+
+appMenu();
