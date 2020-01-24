@@ -190,9 +190,13 @@ function appMenu() {
                         /^[1-9]\d*$/
                     );
                     if (pass) {
-                        return true;
+                        if (idArray.includes(answer)) {
+                            return "This ID is already taken. Please enter a different number."
+                        } else {
+
+                            return "Please enter a positive number greater than zero.";
+                        }
                     }
-                    return "Please enter a positive number greater than zero.";
                 }
             },
             {
