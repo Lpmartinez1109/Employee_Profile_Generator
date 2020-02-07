@@ -130,7 +130,7 @@ function appMenu() {
                             return "This ID is already taken. Please enter a different number."
                         } else {
 
-                            return "Please enter a positive number greater than zero.";
+                            return true;
                         }
                     }
                 }
