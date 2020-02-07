@@ -6,5 +6,6 @@ Users will be able to select a number of engingeer and interns to display there 
 
 
 # Example Menu
-    ![Menu_Example.PNG](Menu_Example.PNG)
-    ![Menu_engineer.PNG](Menu_engineer.PNG)
+
+![Menu_Example.PNG](./images/Menu_Example.PNG)
+![Menu_engineer.PNG](./images/Menu_engineer.PNG)
