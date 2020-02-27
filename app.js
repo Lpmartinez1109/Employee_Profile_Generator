@@ -99,7 +99,8 @@ function appMenu() {
                     addIntern();
                     break;
                 default:
-                    buildTeam();
+                    // buildTeam();
+                    connection.end();
             }
         });
     }
