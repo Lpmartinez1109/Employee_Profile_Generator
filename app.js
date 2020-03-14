@@ -4,8 +4,8 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
-
-const outputPath = path.resolve(__dirname, "output", "team.html");
+const OUTPUT_DIR = path.resolve(__dirname, "output")
+const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
@@ -53,7 +53,7 @@ function appMenu() {
                     if (pass) {
                         return true;
                     }
-                    return "Please a correct email address."
+                    return "Please a valid email address."
                 }
             },
             {
@@ -99,8 +99,8 @@ function appMenu() {
                     addIntern();
                     break;
                 default:
-                    // buildTeam();
-                    connection.end();
+                    buildTeam();
+                    // connection.end();
             }
         });
     }
@@ -233,7 +233,10 @@ function appMenu() {
         });
     }
     function buildTeam(){
-        fs.writeFileSync(outputPath, render(teamMembers), "utf-8")
+        if(!fs.existsSync(OUTPUT_DIR)){
+            fs.mkdirSync(OUTPUT_DIR)
+        }
+        fs.writeFileSync(outputPath, render(teamMemebers), "utf-8")
     }
 
     createManager();
